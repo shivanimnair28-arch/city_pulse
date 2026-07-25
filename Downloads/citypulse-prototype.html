@@ -119,6 +119,7 @@
     background:linear-gradient(135deg, var(--amber), var(--red));
     display:flex; align-items:center; justify-content:center;
     font-size:12px; font-weight:700; color:#0A0E1A;
+    cursor:pointer;
   }
   .refresh-btn{
     border:1px solid var(--border);
@@ -214,9 +215,102 @@
   }
 
   footer.credits{margin-top:20px; font-size:11px; color:var(--text-muted); text-align:center;}
+
+  /* ---------- LOGIN ---------- */
+  .login-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:radial-gradient(circle at 20% 20%, rgba(34,211,238,0.10), transparent 45%),
+               radial-gradient(circle at 80% 80%, rgba(167,139,250,0.10), transparent 45%),
+               var(--bg);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .login-card{
+    width:360px; background:var(--surface); border:1px solid var(--border);
+    border-radius:16px; padding:32px 30px; box-shadow:0 20px 60px rgba(0,0,0,0.45);
+  }
+  .login-brand{display:flex; align-items:center; gap:10px; margin-bottom:22px;}
+  .login-title{font-size:18px; font-weight:700;}
+  .login-sub{font-size:12px; color:var(--text-muted); margin-top:2px;}
+  .field-label{font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; font-family:var(--font-mono); display:block; margin:14px 0 6px 0;}
+  .field-input{
+    width:100%; padding:11px 12px; background:var(--surface-2); border:1px solid var(--border);
+    color:var(--text); border-radius:8px; font-size:13.5px; font-family:var(--font-display);
+  }
+  .field-input:focus{outline:none; border-color:var(--cyan);}
+  .login-btn{
+    width:100%; margin-top:20px; padding:12px; border:none; border-radius:8px; cursor:pointer;
+    background:linear-gradient(135deg, var(--cyan), var(--violet)); color:#08101C;
+    font-weight:700; font-size:13.5px; letter-spacing:0.2px; transition:opacity .15s;
+  }
+  .login-btn:hover{opacity:0.88;}
+  .login-error{font-size:11.5px; color:var(--red); margin-top:10px; min-height:14px;}
+  .login-hint{font-size:11px; color:var(--text-muted); margin-top:16px; line-height:1.6; padding-top:14px; border-top:1px solid var(--border);}
+  .login-hint b{color:var(--text);}
+  .app-wrap{display:none;}
+  .app-wrap.visible{display:flex; width:100%;}
+
+  /* ---------- LOCATION SELECTOR ---------- */
+  .location-select{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:6px 10px; cursor:pointer;
+  }
+  .location-select svg{width:14px; height:14px; color:var(--cyan); flex-shrink:0;}
+  .location-select select{
+    margin:0; padding:0; border:none; background:transparent; width:auto;
+    font-size:12.5px; font-weight:600; color:var(--text); cursor:pointer;
+  }
+  .location-meta{font-size:10.5px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;}
+  .logout-btn{
+    border:1px solid var(--border); background:transparent; color:var(--text-muted);
+    font-size:11px; padding:5px 10px; border-radius:20px; cursor:pointer; transition:.15s;
+  }
+  .logout-btn:hover{color:var(--red); border-color:var(--red);}
+  .user-menu{position:relative;}
+  .user-dropdown{
+    display:none; position:absolute; right:0; top:42px; background:var(--surface);
+    border:1px solid var(--border); border-radius:10px; padding:12px; width:170px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.4); z-index:20;
+  }
+  .user-dropdown.open{display:block;}
+  .user-dropdown .who{font-size:12.5px; font-weight:700;}
+  .user-dropdown .role{font-size:10.5px; color:var(--text-muted); margin-bottom:10px;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline-toggle{display:flex; gap:6px;}
+  .tl-btn{
+    border:1px solid var(--border); background:var(--surface-2); color:var(--text-muted);
+    font-size:11px; font-family:var(--font-mono); padding:5px 12px; border-radius:20px; cursor:pointer; transition:.15s;
+  }
+  .tl-btn.active{background:rgba(34,211,238,0.14); color:var(--cyan); border-color:var(--cyan);}
+  .tl-axis{display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted); font-family:var(--font-mono); margin-top:6px;}
 </style>
 </head>
 <body>
+
+<!-- ============ LOGIN OVERLAY ============ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="#08101C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="login-title">CityPulse</div>
+        <div class="login-sub">Sign in to Smart City OS</div>
+      </div>
+    </div>
+    <label class="field-label">Username</label>
+    <input class="field-input" id="loginUser" type="text" placeholder="e.g. admin" value="admin">
+    <label class="field-label">Password</label>
+    <input class="field-input" id="loginPass" type="password" placeholder="••••••••" value="admin123">
+    <button class="login-btn" id="loginBtn">Sign In</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-hint">Demo credentials — <b>admin / admin123</b><br>This is a dummy client-side login for prototype purposes only. No data is transmitted anywhere.</div>
+  </div>
+</div>
+
+<div class="app-wrap" id="appWrap">
 
 <!-- ============ SIDEBAR ============ -->
 <div class="sidebar">
@@ -257,6 +351,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v10m-12-6v10m0-10H3m6 0h10M3 15v4a2 2 0 002 2h4"/></svg>
       What-If Simulator
     </div>
+    <div class="nav-item" data-section="weekly">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+      Weekly Data
+    </div>
     <div class="nav-item" data-section="analytics">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-6 4 3 5-8"/></svg>
       Analytics
@@ -281,6 +379,19 @@
         <div class="page-title" id="pageTitle">City Overview</div>
         <div class="page-sub" id="pageSub">Live snapshot across all city systems</div>
       </div>
+      <div class="location-select" title="Switch monitored city">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <select id="citySelect">
+            <option value="chennai">Chennai, TN</option>
+            <option value="bengaluru">Bengaluru, KA</option>
+            <option value="mumbai">Mumbai, MH</option>
+            <option value="delhi">New Delhi, DL</option>
+            <option value="hyderabad">Hyderabad, TS</option>
+          </select>
+          <div class="location-meta" id="locationMeta">12.9716° N, 77.5946° E · IST</div>
+        </div>
+      </div>
     </div>
     <div class="pulse-strip">
       <div class="pulse-dot"></div>
@@ -289,7 +400,14 @@
     <div class="topbar-right">
       <div class="clock" id="clock">--:--:--</div>
       <button class="refresh-btn" id="refreshBtn" title="Refresh live data">Refresh</button>
-      <div class="avatar">SP</div>
+      <div class="user-menu">
+        <div class="avatar" id="avatarBtn">SP</div>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="who">Sundar P.</div>
+          <div class="role">City Operations Admin</div>
+          <button class="logout-btn" id="logoutBtn" style="width:100%;">Sign Out</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -299,6 +417,22 @@
     <section class="section active" id="dashboard">
       <div class="section-head"><h1>City Overview</h1><p>Aggregated intelligence across mobility, environment, infrastructure &amp; human activity — MG Road Zone, Chennai</p></div>
       <div class="cards-grid" id="dash-cards"></div>
+      <div class="panel" style="margin-bottom:14px;">
+        <div class="panel-head">
+          <div class="panel-title">City Pulse Timeline</div>
+          <div class="timeline-toggle">
+            <button class="tl-btn active" id="tlHourBtn" data-range="hour">Hourly (24h)</button>
+            <button class="tl-btn" id="tlWeekBtn" data-range="week">Weekly (7d)</button>
+          </div>
+        </div>
+        <div id="timelineChart"></div>
+        <div class="tl-axis" id="timelineAxis"></div>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--cyan)"></i>Traffic Index</span>
+          <span><i class="dot" style="background:var(--green)"></i>AQI</span>
+          <span><i class="dot" style="background:var(--amber)"></i>Crowd Density</span>
+        </div>
+      </div>
       <div class="panels-grid">
         <div class="panel">
           <div class="panel-head"><div class="panel-title">City Pulse Index — 24h Trend</div><div class="panel-tag">LIVE</div></div>
@@ -400,12 +534,85 @@
       </div>
     </section>
 
+    <!-- WEEKLY DATA -->
+    <section class="section" id="weekly">
+      <div class="section-head" style="display:flex; align-items:center; justify-content:space-between;">
+        <div><h1>📅 One-Week Data Review</h1><p>Day-by-day breakdown of city metrics for the last 7 days — dummy sample data</p></div>
+        <button class="refresh-btn" id="weeklyRegenBtn">Regenerate Week</button>
+      </div>
+      <div class="cards-grid" id="weekly-cards"></div>
+      <div class="panels-grid">
+        <div class="panel"><div class="panel-head"><div class="panel-title">Traffic Index — 7 Day</div><div class="panel-tag">DAILY AVG</div></div><div id="weeklyTrafficChart"></div><div class="tl-axis" id="weeklyAxis1"></div></div>
+        <div class="panel"><div class="panel-head"><div class="panel-title">AQI — 7 Day</div><div class="panel-tag">DAILY AVG</div></div><div id="weeklyAqiChart"></div><div class="tl-axis" id="weeklyAxis2"></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Daily Breakdown</div><div class="panel-tag">7 DAYS</div></div>
+        <table id="weeklyTable"></table>
+      </div>
+    </section>
+
     <!-- ANALYTICS -->
     <section class="section" id="analytics">
       <div class="section-head"><h1>Analytics</h1><p>Cross-module correlation &amp; historical performance</p></div>
       <div class="panels-grid">
         <div class="panel"><div class="panel-head"><div class="panel-title">Congestion vs AQI Correlation</div><div class="panel-tag">7-DAY</div></div><div id="anaCorr"></div></div>
         <div class="panel"><div class="panel-head"><div class="panel-title">Module Performance Snapshot</div><div class="panel-tag">SCORES</div></div><div id="anaBars"></div></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px;">
+        <div class="panel-head">
+          <div class="panel-title">Compare Two Cities</div>
+          <div class="timeline-toggle">
+            <button class="tl-btn active" id="cmpHourBtn" data-range="hour">Hourly (24h)</button>
+            <button class="tl-btn" id="cmpWeekBtn" data-range="week">Weekly (7d)</button>
+          </div>
+        </div>
+        <div class="sim-wrap" style="grid-template-columns:260px 1fr;">
+          <div class="sim-form" style="padding:16px;">
+            <label>Dataset A</label>
+            <select id="compareASelect">
+              <option value="chennai">Chennai, TN</option>
+              <option value="bengaluru">Bengaluru, KA</option>
+              <option value="mumbai">Mumbai, MH</option>
+              <option value="delhi">New Delhi, DL</option>
+              <option value="hyderabad">Hyderabad, TS</option>
+            </select>
+            <label>Dataset B</label>
+            <select id="compareBSelect">
+              <option value="chennai">Chennai, TN</option>
+              <option value="bengaluru">Bengaluru, KA</option>
+              <option value="mumbai" selected>Mumbai, MH</option>
+              <option value="delhi">New Delhi, DL</option>
+              <option value="hyderabad">Hyderabad, TS</option>
+            </select>
+            <button class="run-btn" id="compareRunBtn">Regenerate Sample Data</button>
+            <div class="sim-note">Compares two independent dummy datasets side by side. Regenerate to sample new random values for both cities.</div>
+          </div>
+          <div>
+            <div class="panels-grid" style="grid-template-columns:1fr 1fr; margin-bottom:14px;">
+              <div class="panel">
+                <div class="panel-head"><div class="panel-title">Traffic Index</div><div class="panel-tag">A vs B</div></div>
+                <div id="compareTrafficChart"></div>
+                <div class="legend">
+                  <span><i class="dot" style="background:var(--cyan)"></i><span id="compareLabelA">Chennai</span></span>
+                  <span><i class="dot" style="background:var(--violet)"></i><span id="compareLabelB">Mumbai</span></span>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-head"><div class="panel-title">AQI</div><div class="panel-tag">A vs B</div></div>
+                <div id="compareAqiChart"></div>
+                <div class="legend">
+                  <span><i class="dot" style="background:var(--green)"></i>Dataset A</span>
+                  <span><i class="dot" style="background:var(--amber)"></i>Dataset B</span>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div class="panel-title">Metric Comparison</div><div class="panel-tag">SIDE-BY-SIDE</div></div>
+              <table id="compareTable"></table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -426,6 +633,7 @@
     <footer class="credits">CityPulse Prototype · Software Metrics Course Deliverable · Mock data, no backend</footer>
   </div>
 </div>
+</div><!-- /app-wrap -->
 
 <script>
 /* ================= STATE AND DATA ================= */
@@ -491,7 +699,160 @@ const state = {
     new_metro:{traffic:'-12%', pollution:'-9%', travel:'-8 min', crowd:'+20%', base:45, spread:10},
   },
   pulseData: series(40, 17, 10),
+  traffic7d: series(7, 62, 16),
+  aqi7d: series(7, 92, 20),
+  crowd7d: series(7, 52, 18),
 };
+
+/* ================= CITY / LOCATION DATA ================= */
+const cityData = {
+  chennai:{name:'Chennai, Tamil Nadu', coords:'13.0827° N, 80.2707° E', zone:'MG Road Zone', tz:'IST (UTC+5:30)'},
+  bengaluru:{name:'Bengaluru, Karnataka', coords:'12.9716° N, 77.5946° E', zone:'MG Road Zone', tz:'IST (UTC+5:30)'},
+  mumbai:{name:'Mumbai, Maharashtra', coords:'19.0760° N, 72.8777° E', zone:'Bandra-Kurla Zone', tz:'IST (UTC+5:30)'},
+  delhi:{name:'New Delhi, Delhi', coords:'28.6139° N, 77.2090° E', zone:'Connaught Place Zone', tz:'IST (UTC+5:30)'},
+  hyderabad:{name:'Hyderabad, Telangana', coords:'17.3850° N, 78.4867° E', zone:'HITEC City Zone', tz:'IST (UTC+5:30)'},
+};
+function applyCity(key){
+  const c = cityData[key];
+  if(!c) return;
+  document.getElementById('locationMeta').textContent = `${c.coords} · ${c.tz}`;
+  document.querySelectorAll('.section-head p').forEach(p=>{
+    if(p.textContent.includes('—')){
+      p.textContent = p.textContent.replace(/—.*$/, `— ${c.zone}, ${c.name}`);
+    }
+  });
+}
+
+/* ================= COMPARISON DUMMY DATA ================= */
+// Each city gets its own baseline profile so comparisons look distinct & realistic
+const cityProfiles = {
+  chennai:   {traffic:64, aqi:98,  crowd:52, temp:31, speed:36, health:81, noise:61, flow:410},
+  bengaluru: {traffic:71, aqi:88,  crowd:60, temp:24, speed:29, health:76, noise:64, flow:520},
+  mumbai:    {traffic:78, aqi:112, crowd:74, temp:29, speed:24, health:70, noise:70, flow:680},
+  delhi:     {traffic:69, aqi:158, crowd:58, temp:34, speed:33, health:64, noise:66, flow:590},
+  hyderabad: {traffic:58, aqi:84,  crowd:47, temp:30, speed:38, health:84, noise:58, flow:360},
+};
+function generateCompareDataset(cityKey){
+  const p = cityProfiles[cityKey] || cityProfiles.chennai;
+  return {
+    key: cityKey,
+    name: (cityData[cityKey]||{}).name || cityKey,
+    traffic24: series(24, p.traffic, 14),
+    aqi24: series(24, p.aqi, 20),
+    crowd24: series(24, p.crowd, 18),
+    temp24: series(24, p.temp, 3),
+    traffic7d: series(7, p.traffic, 12),
+    aqi7d: series(7, p.aqi, 16),
+    crowd7d: series(7, p.crowd, 14),
+    speed: clamp(p.speed + Math.round((Math.random()-0.5)*6), 15, 60),
+    health: clamp(p.health + Math.round((Math.random()-0.5)*8), 40, 100),
+    noise: clamp(p.noise + Math.round((Math.random()-0.5)*6), 45, 85),
+    flow: clamp(p.flow + Math.round((Math.random()-0.5)*80), 150, 900),
+    faults: series(10, 8, 5).map(x=>Math.max(1,Math.round(x))),
+  };
+}
+let compareA = generateCompareDataset('chennai');
+let compareB = generateCompareDataset('mumbai');
+function avg(arr){ return arr.reduce((s,v)=>s+v,0)/arr.length; }
+function latest(arr){ return arr[arr.length-1]; }
+function compareDeltaLabel(a,b){
+  const diff = a-b;
+  if(Math.abs(diff) < 0.5) return {text:'Roughly equal', cls:'flat'};
+  return diff>0 ? {text:`${Math.abs(Math.round(diff))} higher`, cls:'up'} : {text:`${Math.abs(Math.round(diff))} lower`, cls:'down'};
+}
+function renderComparison(){
+  const rangeIsWeek = compareRange === 'week';
+  const aTraffic = rangeIsWeek ? compareA.traffic7d : compareA.traffic24;
+  const bTraffic = rangeIsWeek ? compareB.traffic7d : compareB.traffic24;
+  const aAqi = rangeIsWeek ? compareA.aqi7d : compareA.aqi24;
+  const bAqi = rangeIsWeek ? compareB.aqi7d : compareB.aqi24;
+  const aCrowd = rangeIsWeek ? compareA.crowd7d : compareA.crowd24;
+  const bCrowd = rangeIsWeek ? compareB.crowd7d : compareB.crowd24;
+
+  document.getElementById('compareLabelA').textContent = compareA.name;
+  document.getElementById('compareLabelB').textContent = compareB.name;
+
+  const rows = [
+    {label:'Traffic Index', a:Math.round(avg(aTraffic)), b:Math.round(avg(bTraffic)), unit:''},
+    {label:'AQI', a:Math.round(avg(aAqi)), b:Math.round(avg(bAqi)), unit:''},
+    {label:'Crowd Density', a:Math.round(avg(aCrowd)), b:Math.round(avg(bCrowd)), unit:''},
+    {label:'Avg Speed', a:compareA.speed, b:compareB.speed, unit:'km/h'},
+    {label:'Infra Health', a:compareA.health, b:compareB.health, unit:'%'},
+    {label:'Noise Level', a:compareA.noise, b:compareB.noise, unit:'dB'},
+    {label:'Transit Flow', a:compareA.flow, b:compareB.flow, unit:'riders/hr'},
+    {label:'Open Faults (30d)', a:compareA.faults.reduce((s,v)=>s+v,0), b:compareB.faults.reduce((s,v)=>s+v,0), unit:''},
+  ];
+  renderTable('compareTable', [
+    {label:'Metric', field:'label'},
+    {label:compareA.name, render: r => `${r.a}${r.unit? ' '+r.unit:''}`},
+    {label:compareB.name, render: r => `${r.b}${r.unit? ' '+r.unit:''}`},
+    {label:'Difference', render: r => {
+      const d = compareDeltaLabel(r.a, r.b);
+      return `<span class="badge ${d.cls==='up'?'crit':d.cls==='down'?'ok':'warn'}">${d.text}</span>`;
+    }},
+  ], rows);
+
+  document.getElementById('compareTrafficChart').innerHTML = multiLineSVG([aTraffic, bTraffic], ['var(--cyan)','var(--violet)'], {h:140});
+  document.getElementById('compareAqiChart').innerHTML = multiLineSVG([aAqi, bAqi], ['var(--green)','var(--amber)'], {h:140});
+}
+let compareRange = 'hour';
+
+/* ================= ONE-WEEK DUMMY DATA ================= */
+const weekDayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const weekDayShort = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function buildWeeklyDataset(){
+  const today = new Date();
+  const rows = weekDayNames.map((day, idx)=>{
+    const isWeekend = idx>=5;
+    const traffic = clamp(Math.round(series(1, isWeekend?48:70, 12)[0]), 20, 100);
+    const aqi = clamp(Math.round(series(1, isWeekend?80:100, 20)[0]), 30, 200);
+    const crowd = clamp(Math.round(series(1, isWeekend?65:48, 15)[0]), 15, 100);
+    const temp = (isWeekend?29:31) + (Math.random()-0.5)*3;
+    const incidents = Math.max(0, Math.round(series(1, isWeekend?2:5, 3)[0]));
+    const faults = Math.max(0, Math.round(series(1, 6, 4)[0]));
+    const d = new Date(today); d.setDate(today.getDate() - (6-idx));
+    return {
+      day, short: weekDayShort[idx],
+      date: d.toLocaleDateString('en-IN', {month:'short', day:'numeric'}),
+      traffic, aqi, crowd, temp:temp.toFixed(1), incidents, faults,
+      status: aqi>130?'Critical':aqi>90?'Moderate':'Healthy',
+    };
+  });
+  return rows;
+}
+let weeklyData = buildWeeklyDataset();
+function renderWeeklySection(){
+  const trafficSeries = weeklyData.map(r=>r.traffic);
+  const aqiSeries = weeklyData.map(r=>r.aqi);
+  const crowdSeries = weeklyData.map(r=>r.crowd);
+  const totalIncidents = weeklyData.reduce((s,r)=>s+r.incidents,0);
+  const totalFaults = weeklyData.reduce((s,r)=>s+r.faults,0);
+  const busiestDay = weeklyData.reduce((a,b)=> b.traffic>a.traffic? b:a, weeklyData[0]);
+  const worstAqiDay = weeklyData.reduce((a,b)=> b.aqi>a.aqi? b:a, weeklyData[0]);
+
+  renderCards('weekly-cards', [
+    {label:'Avg Traffic Index (7d)', value:Math.round(avg(trafficSeries)), unit:'/100', delta:`Peak on ${busiestDay.day}`, accent:'var(--cyan)', dir:'flat'},
+    {label:'Avg AQI (7d)', value:Math.round(avg(aqiSeries)), unit:'AQI', delta:`Worst on ${worstAqiDay.day}`, accent:'var(--amber)', dir:'up'},
+    {label:'Avg Crowd Density (7d)', value:Math.round(avg(crowdSeries)), unit:'/100', delta:'Weekend surge typical', accent:'var(--violet)', dir:'flat'},
+    {label:'Incidents Logged (7d)', value:totalIncidents, unit:'events', delta:`${totalFaults} maintenance faults`, accent:'var(--red)', dir:'up'},
+  ]);
+
+  document.getElementById('weeklyTrafficChart').innerHTML = barSVG(trafficSeries, {color:'var(--cyan)'});
+  document.getElementById('weeklyAxis1').innerHTML = weeklyData.map(r=>`<span>${r.short}</span>`).join('');
+  document.getElementById('weeklyAqiChart').innerHTML = barSVG(aqiSeries, {color:'var(--amber)'});
+  document.getElementById('weeklyAxis2').innerHTML = weeklyData.map(r=>`<span>${r.short}</span>`).join('');
+
+  renderTable('weeklyTable', [
+    {label:'Day', render: r => `${r.day} <span style="color:var(--text-muted); font-size:11px;">(${r.date})</span>`},
+    {label:'Traffic Index', render: r => `${r.traffic}/100`},
+    {label:'AQI', render: r => r.aqi},
+    {label:'Crowd Density', render: r => `${r.crowd}/100`},
+    {label:'Temp', render: r => `${r.temp}°C`},
+    {label:'Incidents', field:'incidents'},
+    {label:'Faults', field:'faults'},
+    {label:'Status', render: r => `<span class="badge ${badgeClass(r.status)}">${r.status}</span>`},
+  ], weeklyData);
+}
 
 /* ================= SVG CHART HELPERS ================= */
 function lineSVG(data, opts={}){
@@ -713,6 +1074,7 @@ const titles = {
   infrastructure:['Infrastructure Health','Roads, utilities & maintenance'],
   human:['Human Activity','Crowd, transit & event demand'],
   simulator:['What-If Simulator','Scenario-based impact projection'],
+  weekly:['One-Week Data Review','Day-by-day breakdown of city metrics'],
   analytics:['Analytics','Cross-module correlation & trends'],
   reports:['Reports','Generated stakeholder reports'],
   settings:['Settings','Prototype configuration'],
@@ -772,11 +1134,116 @@ function animatePulse(){
 
 function tickClock(){ updateLiveStatus(); }
 
-refreshAllData();
-runSimulation();
-setInterval(refreshAllData, 10000);
-setInterval(animatePulse, 900);
-setInterval(tickClock, 1000);
+/* ================= TIMELINE (HOUR / WEEK) ================= */
+const hourLabels = Array.from({length:24}, (_,i)=> (i%3===0? `${String(i).padStart(2,'0')}:00` : ''));
+const weekLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+let timelineRange = 'hour';
+function renderTimeline(){
+  const isHour = timelineRange === 'hour';
+  const traffic = isHour ? state.traffic24 : state.traffic7d;
+  const aqi = isHour ? state.aqi24 : state.aqi7d;
+  const crowd = isHour ? state.crowd24 : state.crowd7d;
+  document.getElementById('timelineChart').innerHTML = multiLineSVG([traffic, aqi, crowd], ['var(--cyan)','var(--green)','var(--amber)'], {h:150});
+  const labels = isHour ? hourLabels.filter((_,i)=> i%3===0) : weekLabels;
+  document.getElementById('timelineAxis').innerHTML = labels.map(l=>`<span>${l}</span>`).join('');
+}
+document.getElementById('tlHourBtn').addEventListener('click', ()=>{
+  timelineRange='hour';
+  document.getElementById('tlHourBtn').classList.add('active');
+  document.getElementById('tlWeekBtn').classList.remove('active');
+  renderTimeline();
+});
+document.getElementById('tlWeekBtn').addEventListener('click', ()=>{
+  timelineRange='week';
+  document.getElementById('tlWeekBtn').classList.add('active');
+  document.getElementById('tlHourBtn').classList.remove('active');
+  renderTimeline();
+});
+
+/* ================= CITY SELECTOR ================= */
+document.getElementById('citySelect').addEventListener('change', (e)=> applyCity(e.target.value));
+
+/* ================= COMPARISON CONTROLS ================= */
+document.getElementById('compareASelect').addEventListener('change', (e)=>{
+  compareA = generateCompareDataset(e.target.value);
+  renderComparison();
+});
+document.getElementById('compareBSelect').addEventListener('change', (e)=>{
+  compareB = generateCompareDataset(e.target.value);
+  renderComparison();
+});
+document.getElementById('compareRunBtn').addEventListener('click', ()=>{
+  compareA = generateCompareDataset(document.getElementById('compareASelect').value);
+  compareB = generateCompareDataset(document.getElementById('compareBSelect').value);
+  renderComparison();
+});
+document.getElementById('cmpHourBtn').addEventListener('click', ()=>{
+  compareRange='hour';
+  document.getElementById('cmpHourBtn').classList.add('active');
+  document.getElementById('cmpWeekBtn').classList.remove('active');
+  renderComparison();
+});
+document.getElementById('cmpWeekBtn').addEventListener('click', ()=>{
+  compareRange='week';
+  document.getElementById('cmpWeekBtn').classList.add('active');
+  document.getElementById('cmpHourBtn').classList.remove('active');
+  renderComparison();
+});
+document.getElementById('weeklyRegenBtn').addEventListener('click', ()=>{
+  weeklyData = buildWeeklyDataset();
+  renderWeeklySection();
+});
+
+/* ================= USER MENU ================= */
+document.getElementById('avatarBtn').addEventListener('click', ()=>{
+  document.getElementById('userDropdown').classList.toggle('open');
+});
+document.addEventListener('click', (e)=>{
+  const menu = document.querySelector('.user-menu');
+  if(menu && !menu.contains(e.target)) document.getElementById('userDropdown').classList.remove('open');
+});
+
+/* ================= DUMMY LOGIN ================= */
+const DUMMY_USER = 'admin', DUMMY_PASS = 'admin123';
+function attemptLogin(){
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const errorEl = document.getElementById('loginError');
+  if(user === DUMMY_USER && pass === DUMMY_PASS){
+    errorEl.textContent = '';
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('appWrap').classList.add('visible');
+    bootApp();
+  } else {
+    errorEl.textContent = 'Invalid username or password. Try admin / admin123.';
+  }
+}
+document.getElementById('loginBtn').addEventListener('click', attemptLogin);
+document.getElementById('loginPass').addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptLogin(); });
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  document.getElementById('userDropdown').classList.remove('open');
+  document.getElementById('appWrap').classList.remove('visible');
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').textContent = '';
+});
+
+/* ================= BOOT ================= */
+let appBooted = false;
+function bootApp(){
+  if(appBooted) return;
+  appBooted = true;
+  applyCity(document.getElementById('citySelect').value);
+  refreshAllData();
+  runSimulation();
+  renderTimeline();
+  renderComparison();
+  renderWeeklySection();
+  setInterval(()=>{ refreshAllData(); renderTimeline(); }, 10000);
+  setInterval(animatePulse, 900);
+  setInterval(tickClock, 1000);
+}
 </script>
 </body>
 </html>
